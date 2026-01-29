@@ -473,9 +473,62 @@ nav {
   overflow: hidden; clip: rect(0,0,0,0); border: 0;
 }
 
+/* -- Pagination -- */
+.pagination {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 1rem;
+  margin-top: 2rem;
+  padding: 1rem 0;
+}
 
+.pagination-info {
+  font-weight: 600;
+  color: var(--color-text-main);
+  padding: 0.75rem 1rem;
+}
 
-/* AI USE END */
+/* -- Filter Form -- */
+.filter-form {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  padding: 1rem;
+  background-color: var(--color-bg-alt);
+  border-radius: var(--radius);
+  margin-bottom: 2rem;
+}
+
+.filter-form label {
+  margin-bottom: 0;
+  white-space: nowrap;
+}
+
+.filter-form select {
+  margin-bottom: 0;
+  min-width: 200px;
+}
+
+@media (max-width: 768px) {
+  .pagination {
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+  
+  .pagination .btn {
+    width: 100%;
+  }
+  
+  .filter-form {
+    flex-direction: column;
+    align-items: stretch;
+  }
+  
+  .filter-form select {
+    width: 100%;
+  }
+}
 
 
 /* -- Tables -- */
@@ -486,7 +539,7 @@ table {
 }
 
 th, td {
-  padding: 0.75rem;
+  padding: 2rem;
   text-align: left;
   border-bottom: 1px solid var(--color-border);
 }
@@ -564,3 +617,95 @@ th {
     content: none;
   }
 }
+
+/* Plan Detail View Styles 
+.plan-detail {
+  background: white;
+  padding: 2rem;
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+}
+
+.plan-detail h1 {
+  margin-bottom: 1.5rem;
+  color: var(--color-text-main);
+}
+
+.plan-detail h2 {
+  font-size: 1.5rem;
+  margin-bottom: 1rem;
+  color: var(--color-text-main);
+  border-bottom: 2px solid var(--color-primary);
+  padding-bottom: 0.5rem;
+}
+
+.plan-image {
+  text-align: center;
+  margin-bottom: 2rem;
+}
+
+.plan-image img {
+  box-shadow: var(--shadow);
+}
+
+.plan-info {
+  background: var(--color-bg);
+  padding: 1.5rem;
+  border-radius: var(--radius);
+  margin-bottom: 2rem;
+}
+
+.info-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 1rem;
+}
+
+.info-item {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+}
+
+.info-item strong {
+  color: var(--color-text-muted);
+  font-size: 0.875rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.info-item span {
+  color: var(--color-text-main);
+  font-size: 1.125rem;
+}
+
+.plan-short-description,
+.plan-long-description {
+  line-height: 1.8;
+}
+
+.plan-short-description p,
+.plan-long-description p {
+  color: var(--color-text-main);
+  font-size: 1rem;
+}
+
+.plan-long-description {
+  margin-top: 2rem;
+}
+
+@media (max-width: 768px) {
+  .plan-detail {
+    padding: 1rem;
+  }
+  
+  .plan-info {
+    padding: 1rem;
+  }
+  
+  .info-grid {
+    grid-template-columns: 1fr;
+  }
+}
+*/
+/* AI USE END */

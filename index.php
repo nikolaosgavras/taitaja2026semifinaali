@@ -51,7 +51,7 @@ mysqli_close($link);
 
     <main>
         <div class="container">
-            <div class="grid-2 mb-2">
+            <div class="grid-2">
                 <img src="images/frontpage_hero.png" alt="Kaavakanta kuva">
                 <div class="text-center">
                     <h1 class="mb-3">Tervetuloa Kaavakantaan</h1>
@@ -89,16 +89,16 @@ mysqli_close($link);
 
                     </p>
                 </div>
-                <div class="flex-column text-center align-center justify-center mb-2">
+                <div class="flex-column text-center align-center justify-center">
                     <a href="plans.php" class="btn" role="button">Tutustu kaavaehtotuksiin</a>
-                    <a href="register.php" class="btn" role="button">Rekisteröidy ja kommentoi kaavaehdotuksia</a>
-                    <a href="login.php" class="btn" role="button">Kirjaudu sisään</a>
+                    <a href="auth/register.php" class="btn" role="button">Rekisteröidy ja kommentoi kaavaehdotuksia</a>
+                    <a href="auth/login.php" class="btn" role="button">Kirjaudu sisään</a>
                 </div>
             </div>
         </div>
     </main>
 
-    <footer>
+    <footer class="mt-2">
         <div class="card">
             <div class="container text-center">
                 <p>&copy; 2026 Nikolaos Gavras. <br> Savon ammattiopisto</p>
