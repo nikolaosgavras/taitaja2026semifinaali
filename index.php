@@ -1,5 +1,7 @@
 <?php include 'config/conn.php';
-    
+
+session_start();
+
 // Test database connection
 try {
     $link = createMysqliConnection();
@@ -11,7 +13,9 @@ try {
     die("✗ Connection failed: " . $e->getMessage());
 }
 
-// session_start();
+
+
+
 
 
 

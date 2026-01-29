@@ -229,7 +229,7 @@ mysqli_close($link);
                 <div class="grid-auto">
                     <div class="mb-2 text-center">
                         <a href="plans.php" style="display: inline-flex; align-items: center; gap: 10px;">
-                            <img src="icons/6.svg" style="transform: rotate(180deg);" alt="Takaisin kaavaehdotuksiin">
+                            <img src="icons/6.png" width="45px" style="transform: rotate(180deg);" alt="Takaisin kaavaehdotuksiin">
                             <span>Takaisin kaavaehdotuksiin</span>
                         </a>
                     </div>
@@ -278,7 +278,7 @@ mysqli_close($link);
                                     <td data-label="Kuvaus"><?php echo htmlspecialchars($plan['short_description']); ?></td>
                                     <td data-label="Tila"><?php echo htmlspecialchars($plan['status_name'] ?? 'Ei tietoa'); ?></td>
                                     <td data-label="">
-                                        <a href="plans.php?id=<?php echo $plan['id']; ?>"><img src="icons/6.svg" alt="Näytä lisätietoja"></a>
+                                        <a href="plans.php?id=<?php echo $plan['id']; ?>"><img src="icons/6.png" width="45px" alt="Näytä lisätietoja"></a>
                                     </td>
                                 </tr>
                             <?php endforeach; ?>

@@ -1,8 +1,10 @@
-<?php include 'conn.php';
+<?php include 'config/conn.php';
+
+session_start();
     
 $link = createMysqliConnection();  
 
-session_start();
+
 
 
 if (isset($_SESSION['account_loggedin'])) {
