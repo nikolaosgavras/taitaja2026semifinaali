@@ -68,6 +68,7 @@ mysqli_close($link);
                     </p>
                 </div>
             </div>
+
     
             <div class="grid-2">
                 <div class="text-center">
@@ -88,10 +89,10 @@ mysqli_close($link);
 
                     </p>
                 </div>
-                <div class="flex-column text-center align-center justify-center">
-                    <a href="#suggestions" class="btn" role="button">Tutustu kaavaehtotuksiin</a>
-                    <a href="#register" class="btn" role="button">Rekisteröidy ja kommentoi kaavaehdotuksia</a>
-                    <a href="#login" class="btn" role="button">Kirjaudu sisään</a>
+                <div class="flex-column text-center align-center justify-center mb-2">
+                    <a href="plans.php" class="btn" role="button">Tutustu kaavaehtotuksiin</a>
+                    <a href="register.php" class="btn" role="button">Rekisteröidy ja kommentoi kaavaehdotuksia</a>
+                    <a href="login.php" class="btn" role="button">Kirjaudu sisään</a>
                 </div>
             </div>
         </div>
