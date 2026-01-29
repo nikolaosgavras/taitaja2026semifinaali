@@ -233,9 +233,7 @@ mysqli_close($link);
                 <div class="grid-auto">
                     <div class="mb-2 text-center">
                         <a href="plans.php" style="display: inline-flex; align-items: center; gap: 10px;">
-                            <svg width="45" height="45" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                                <path d="M19 12H5M12 19l-7-7 7-7"/>
-                            </svg>
+                            <img src="icons/6.svg" style="transform: rotate(180deg);" alt="Takaisin kaavaehdotuksiin">
                             <span>Takaisin kaavaehdotuksiin</span>
                         </a>
                     </div>
@@ -285,11 +283,8 @@ mysqli_close($link);
                                     <td data-label="Tila"><?php echo htmlspecialchars($plan['status_name'] ?? 'Ei tietoa'); ?></td>
                                     <td data-label="">
                                         <a href="plans.php?id=<?php echo $plan['id']; ?>" style="display: inline-flex; align-items: center; gap: 10px;">
-                                        
-                                        <svg width="45" height="45" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                                            <path d="M5 12h14m-7-7l7 7-7 7"/>
-                                        </svg>
-                                    </a>
+                                            <img src="icons/6.svg" alt="Tarkastele kaavaehdotusta">
+                                        </a>
                                     </td>
                                 </tr>
                             <?php endforeach; ?>

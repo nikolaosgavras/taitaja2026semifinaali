@@ -96,7 +96,7 @@ mysqli_close($link);
     <main>
     <div class="container">
         <h1 class="text-center mb-2">Luo tili</h1>
-        <p class="text-center mb-3">Tämä palvelu on tarkoitettu vain kunnan asukkaille. Rekisteröitymällä vakuutat olevasi kunnan asukas </p>
+        <p class="text-center mb-3">Tämä palvelu on tarkoitettu vain kunnan asukkaille. Rekisteröitymällä vakuutat olevasi kunnan asukas. </p>
         <?php if (!empty($message)): ?>
             <div class="mb-2 text-center">
                 <p style="color: red;"><?php echo htmlspecialchars($message); ?></p>
