@@ -1,0 +1,363 @@
+/* AI USE: GEMINI
+KÄYTETTY LUOMAAN OMA CSS LIBRARY */
+
+@import url("https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Playfair+Display:wght@700;800&display=swap");
+
+/* 1. DESIGN TOKENS & VARIABLES 
+   ----------------------------------------------------------------------
+   We use CSS variables to control the entire theme. 
+   Change these values here, and the changes ripple through the whole site.
+*/
+:root {
+  --color-bg: #ffffff;
+  --color-bg-alt: #f8f9fa;
+  --color-text-main: #1f2937; /* Dark Gray for high contrast */
+  --color-text-muted: #6b7280;
+  
+  --color-primary: #2563eb;   /* Royal Blue */
+  --color-primary-hover: #1d4ed8;
+  --color-primary-text: #ffffff;
+  
+  --color-border: #e5e7eb;
+  
+  /* -- SPACING & SHAPE -- */
+  --spacing-unit: 1rem;       /* Base unit (16px usually) */
+  --container-width: 1200px;  /* Max width of your content */
+  --radius: 8px;              /* Soft rounded corners */
+  --shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+  
+  /* -- TYPOGRAPHY -- */
+  --font-sans: 'Inter', system-ui, -apple-system, sans-serif;
+  --font-heading: 'Playfair Display', Georgia, serif;
+  --font-line-height: 1.6;
+}
+
+/* 2. DARK MODE
+   ----------------------------------------------------------------------
+   This block automatically detects if the user's device is in Dark Mode
+   and swaps the variables. No JS required.
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --color-bg: #111827;      
+    --color-bg-alt: #1f2937;
+    --color-text-main: #f9fafb;
+    --color-text-muted: #9ca3af;
+    --color-border: #374151;
+    
+    --color-primary: #3b82f6; 
+    --color-primary-hover: #60a5fa;
+  }
+}
+*/
+
+/* 3. BASE RESET & TYPOGRAPHY
+   ----------------------------------------------------------------------
+   Styles standard HTML tags automatically. 
+*/
+*, *::before, *::after {
+  box-sizing: border-box; /* Crucial for predictable sizing */
+}
+
+body {
+  margin: 0;
+  padding: 0;
+  font-family: var(--font-sans);
+  background-color: var(--color-bg);
+  color: var(--color-text-main);
+  line-height: var(--font-line-height);
+  -webkit-font-smoothing: antialiased;
+}
+
+/* Responsive Headings */
+h1, h2, h3, h4, h5, h6 {
+  margin-top: 2rem;
+  margin-bottom: 1rem;
+  font-family: var(--font-heading);
+  font-weight: 700;
+  line-height: 1.2;
+  color: var(--color-text-main);
+}
+
+h1 { font-size: 2.5rem; letter-spacing: -0.02em; }
+h2 { font-size: 2rem; letter-spacing: -0.01em; }
+h3 { font-size: 1.5rem; }
+
+p { margin-bottom: 1.5rem; }
+
+/* Links */
+a {
+  color: var(--color-primary);
+  text-decoration: none;
+  font-weight: 500;
+  transition: color 0.2s ease;
+}
+a:hover { text-decoration: underline; color: var(--color-primary-hover); }
+
+/* Blockquotes */
+blockquote {
+  border-left: 4px solid var(--color-primary);
+  margin: 1.5rem 0;
+  padding-left: 1rem;
+  font-style: italic;
+  color: var(--color-text-muted);
+  background: var(--color-bg-alt);
+  padding: 1rem;
+  border-radius: 0 var(--radius) var(--radius) 0;
+}
+
+/* 4. LAYOUT SYSTEM (THE CORE)
+   ----------------------------------------------------------------------
+   This section provides the Container, Flexbox, and Grid utilities.
+*/
+
+/* -- The Container --
+   Centers your content on the page. 
+   Usage: <div class="container">Content...</div>
+*/
+.container {
+  width: 100%;
+  max-width: var(--container-width);
+  margin-left: auto;
+  margin-right: auto;
+  padding-left: var(--spacing-unit);
+  padding-right: var(--spacing-unit);
+}
+
+/* -- Flex Utilities --
+   Use for 1-dimensional layouts (navbars, centering items, lists).
+   
+   Example HTML:
+   <div class="flex-row justify-between align-center">
+      <div>Logo</div>
+      <div>Menu</div>
+   </div>
+*/
+.flex-row {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap; /* Wraps on mobile automatically */
+  gap: var(--spacing-unit); /* Spacing between items */
+}
+
+.flex-column {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-unit);
+}
+
+/* Alignment Helpers */
+.justify-center  { justify-content: center; }
+.justify-between { justify-content: space-between; }
+.justify-end     { justify-content: flex-end; }
+.align-center    { align-items: center; }
+.align-start     { align-items: flex-start; }
+
+/* -- Grid Utilities --
+   Use for 2-dimensional layouts (photo galleries, feature lists).
+   
+   Example HTML (3 Columns):
+   <div class="grid-3">
+      <div class="card">Item 1</div>
+      <div class="card">Item 2</div>
+      <div class="card">Item 3</div>
+   </div>
+*/
+
+/* Default Grid Settings */
+[class^="grid-"] {
+  display: grid;
+  gap: var(--spacing-unit); /* Change gap here if needed */
+}
+
+/* Responsive Auto Grid (Magical)
+   Automatically fits as many columns as possible based on width (min 250px).
+   This is the best class for mobile-first responsiveness. */
+.grid-auto {
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+}
+
+/* Fixed Columns (Stack to single column on mobile) */
+.grid-2 { grid-template-columns: 1fr; }
+.grid-3 { grid-template-columns: 1fr; }
+.grid-4 { grid-template-columns: 1fr; }
+
+@media (min-width: 768px) {
+  .grid-2 { grid-template-columns: repeat(2, 1fr); }
+  .grid-3 { grid-template-columns: repeat(3, 1fr); }
+  .grid-4 { grid-template-columns: repeat(4, 1fr); }
+}
+
+/* 5. COMPONENTS
+   ----------------------------------------------------------------------
+   Ready-to-use styles for common UI elements.
+*/
+
+/* -- Buttons -- 
+   Applies to <button>, <input type="submit">, and .btn class 
+*/
+button, input[type="submit"], input[type="button"], .btn {
+  display: inline-block;
+  padding: 0.75rem 1.5rem;
+  border: 1px solid transparent;
+  border-radius: var(--radius);
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  background-color: var(--color-primary);
+  color: var(--color-primary-text);
+  text-align: center;
+  text-decoration: none;
+}
+
+/* Hover & Focus States (Accessibility Critical) */
+button:hover, input[type="submit"]:hover, .btn:hover {
+  background-color: var(--color-primary-hover);
+  transform: translateY(-1px);
+}
+
+button:focus-visible, .btn:focus-visible, a:focus-visible, input:focus-visible {
+  outline: 2px solid var(--color-primary);
+  outline-offset: 2px;
+}
+
+button:active, .btn:active {
+  transform: translateY(0);
+}
+
+/* Button Variants */
+.btn-secondary {
+  background-color: var(--color-bg-alt);
+  color: var(--color-text-main);
+  border: 1px solid var(--color-border);
+}
+.btn-secondary:hover {
+  background-color: var(--color-border);
+  color: var(--color-text-main); /* Ensure text stays readable */
+}
+
+.btn-outline {
+  background-color: transparent;
+  border: 1px solid var(--color-primary);
+  color: var(--color-primary);
+}
+.btn-outline:hover {
+  background-color: var(--color-primary);
+  color: white;
+}
+
+/* -- Forms -- */
+input[type="text"], input[type="email"], input[type="password"], textarea, select {
+  width: 100%;
+  padding: 0.75rem;
+  margin-bottom: 1rem;
+  border: 1px solid var(--color-border);
+  background-color: var(--color-bg);
+  color: var(--color-text-main);
+  border-radius: var(--radius);
+  font-size: 1rem;
+  font-family: inherit;
+  transition: border-color 0.2s;
+}
+
+input:focus, textarea:focus, select:focus {
+  border-color: var(--color-primary);
+  outline: none;
+  box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1); /* Subtle glow */
+}
+
+label {
+  display: block;
+  margin-bottom: 0.5rem;
+  font-weight: 600;
+  font-size: 0.9rem;
+  color: var(--color-text-main);
+}
+
+/* -- Cards -- 
+   A simple container for grouping content.
+*/
+.card {
+  background-color: var(--color-bg);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius);
+  padding: 2rem;
+  box-shadow: var(--shadow);
+}
+
+/* -- Navbar -- 
+   A simple flexbox navbar.
+   Structure: <nav><ul><li><a href="#">Link</a></li></ul></nav>
+*/
+nav {
+  padding: 1rem 0;
+  border-bottom: 1px solid var(--color-border);
+  margin-bottom: 2rem;
+}
+
+nav ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  gap: 1.5rem;
+  align-items: center;
+}
+
+nav ul li a {
+  color: var(--color-text-main);
+  text-decoration: none;
+  font-weight: 600;
+}
+
+nav ul li a:hover {
+  color: var(--color-primary);
+}
+
+/* Brand/Logo helper within Nav */
+.nav-brand {
+  font-size: 1.25rem;
+  font-weight: 800;
+  margin-right: auto; /* Pushes links to the right */
+  color: var(--color-text-main);
+}
+
+/* -- Tables -- */
+table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-bottom: 1.5rem;
+}
+
+th, td {
+  padding: 0.75rem;
+  text-align: left;
+  border-bottom: 1px solid var(--color-border);
+}
+
+th {
+  font-weight: 700;
+  color: var(--color-text-muted);
+  text-transform: uppercase;
+  font-size: 0.85rem;
+  letter-spacing: 0.05em;
+}
+
+/* 6. UTILITIES
+   ----------------------------------------------------------------------
+   Small helpers.
+*/
+.text-center { text-align: center; }
+.text-right { text-align: right; }
+.mt-0 { margin-top: 0; }
+.mb-0 { margin-bottom: 0; }
+.full-width { width: 100%; }
+.visually-hidden {
+  position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px;
+  overflow: hidden; clip: rect(0,0,0,0); border: 0;
+}
+
+
+
+/* AI USE END */
