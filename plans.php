@@ -323,7 +323,7 @@ mysqli_close($link);
     <footer class="mt-2">
         <div class="card">
             <div class="container text-center">
-                <p>&copy; 2026 Nikolaos Gavras. <br> Savon ammattiopisto</p>
+                <p>&copy; 2026 Nikolaos Gavras <br> Savon ammattiopisto</p>
             </div>
         </div>
     </footer>

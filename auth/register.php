@@ -7,6 +7,17 @@ $link = createMysqliConnection();
 
 $message = '';
 
+$show_success_popup = false;
+if (isset($_SESSION['registration_success'])) {
+    $show_success_popup = true;
+    unset($_SESSION['registration_success']);
+}
+
+if (isset($_SESSION['message'])) {
+    $message = $_SESSION['message'];
+    unset($_SESSION['message']);
+}
+
 // Check if form was submitted
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     // Check if the email already exists
@@ -22,25 +33,34 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $message = 'Sähköpostiosoite on jo käytössä! Valitse toinen!';
         } else {
             // We do not want to expose passwords in our database, so hash the password and use password_verify when a user logs in
-            $password = password_hash($_POST['password'], PASSWORD_DEFAULT);
-            // Email does not exist, insert new account
-            if ($stmt = $link->prepare('INSERT INTO accounts (name, email, address, phone_number, password_hash) VALUES (?, ?, ?, ?, ?)')) {
-                // Bind POST data to the prepared statement
-                $stmt->bind_param('sssss', $_POST['name'], $_POST['email'], $_POST['address'], $_POST['phone'], $password);
-                $stmt->execute();
-                // Output success message
-                $message = 'Tilin luonti onnistui!';
-            } else {
-                // Something is wrong with the SQL statement
-                $message = 'Lauseen valmistelu epäonnistui!';
+            if ($_POST["password"] === $_POST["confirm_password"]) {
+                $password = password_hash($_POST['password'], PASSWORD_DEFAULT);
+                // Email does not exist, insert new account
+                if ($stmt = $link->prepare('INSERT INTO accounts (name, email, address, phone_number, password_hash) VALUES (?, ?, ?, ?, ?)')) {
+                    // Bind POST data to the prepared statement
+                    $stmt->bind_param('sssss', $_POST['name'], $_POST['email'], $_POST['address'], $_POST['phone'], $password);
+                    $stmt->execute();
+                    $_SESSION['registration_success'] = true;
+                } else {
+                    // Something is wrong with the SQL statement
+                    $message = 'Odottamaton virhe tilin luonnissa!';
+                }    
             }
+            else {
+                $message = 'Salasanat eivät täsmää!';
+            }
+            
         }
         // Close the statement
         $stmt->close();
     } else {
         // Something is wrong with the SQL statement
-        $message = 'Lauseen valmistelu epäonnistui!';
+        $message = 'Odottamaton virhe tilin luonnissa!';
     }
+
+    $_SESSION['message'] = $message;
+    header("Location: register.php");
+    exit;
 }
 
 mysqli_close($link);
@@ -75,15 +95,14 @@ mysqli_close($link);
     </nav>
     <main>
     <div class="container">
-        <h1 class="text-center mb-3">Luo tili</h1>
-        
+        <h1 class="text-center mb-2">Luo tili</h1>
+        <p class="text-center mb-3">Tämä palvelu on tarkoitettu vain kunnan asukkaille. Rekisteröitymällä vakuutat olevasi kunnan asukas </p>
         <?php if (!empty($message)): ?>
             <div class="mb-2 text-center">
-                <p><?php echo htmlspecialchars($message); ?></p>
+                <p style="color: red;"><?php echo htmlspecialchars($message); ?></p>
             </div>
-        <?php endif; ?>
-        
-        <form method="post">
+            <?php endif; ?>
+        <form method="post" action="register.php" onsubmit="return validateForm()">
             <div class="grid-2">
                 <div class="register-form card">
                     <div class="mb-2">
@@ -97,6 +116,10 @@ mysqli_close($link);
                     <div class="mb-2">
                         <label for="password" class="form-label">Salasana</label>
                         <input type="password" class="form-control" id="password" name="password" placeholder="Syötä salasana" required>
+                    </div>
+                    <div class="mb-2" id="passwordError">
+                        <label for="password" class="form-label">Vahvista salasana uudelleen</label>
+                        <input type="password" class="form-control" id="confirm_password" name="confirm_password" placeholder="Syötä salasana uudelleen" required>
                     </div>
                     <div class="mb-2">
                         <label for="address" class="form-label">Osoite</label>
@@ -112,9 +135,9 @@ mysqli_close($link);
                             Hyväksyn, että antamani tiedot tallennetaan järjestelmään ja että tiedot ovat kunnan kaavoitusasioista vastaavien henkilöiden nähtävissä palvelun käyttötarkoituksen mukaisesti.
                         </label>
                     </div>
-                    <button type="submit" class="btn btn-primary w-100">Luo tili</button>
+                    <input type="submit" class="btn" value="Luo tili">
                 </div>
-                <div class="card align-center justify-center text-center">
+                <div class="flex-column align-center justify-center text-center">
                     <h1>Oletko jo rekisteröitynyt?</h1>
                     <a href="login.php" class="btn" role="button">Tästä kirjautuminen</a>
                 </div>
@@ -125,9 +148,49 @@ mysqli_close($link);
     <footer class="mt-2">
         <div class="card">
             <div class="container text-center">
-                <p>&copy; 2026 Nikolaos Gavras. <br> Savon ammattiopisto</p>
+                <p>&copy; 2026 Nikolaos Gavras <br> Savon ammattiopisto</p>
             </div>
         </div>
     </footer>
+    <?php if ($show_success_popup): ?>
+    <div class="modal-overlay">
+        <div class="modal card text-center">
+            <h2>Tilin luonti onnistui</h2>
+            <a href="login.php" class="btn">Kirjaudu sisään</a>
+        </div>
+    </div>
+    <?php endif; ?>
 </body>
+<script src="../js/scripts.js"></script>
+<script>
+    // Password match validation
+function validateForm() {
+    var pass1 = document.getElementById("password").value;
+    var pass2 = document.getElementById("confirm_password").value;
+    var ok = true;
+    if (pass1 != pass2) {
+        document.getElementById("password").style.borderColor = "#E34234";
+        const errorContainer = document.getElementById("passwordError");
+        if (!errorContainer.querySelector("p.error-message")) {
+            const para = document.createElement("p");
+            para.className = "error-message";
+            para.style.color = "red";
+            para.innerText = "Salasanat eivät täsmää!";
+            errorContainer.appendChild(para);
+        }
+        document.getElementById("confirm_password").style.borderColor = "#E34234";
+        return false;
+    }
+    else {
+        document.getElementById("password").style.borderColor = "";
+        const errorContainer = document.getElementById("passwordError");
+        const existingError = errorContainer.querySelector("p.error-message");
+        if (existingError) {
+            errorContainer.removeChild(existingError);
+        }
+        document.getElementById("confirm_password").style.borderColor = "";
+    }
+    return ok;
+}
+</script>
 </html>

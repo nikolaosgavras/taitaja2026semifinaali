@@ -84,11 +84,9 @@ mysqli_close($link);
 
     <main>
         <div class="container">
-            <div class="grid-2">
-                <div></div>
-                <div>
+            <div class="grid-auto">
+                <div class="card">
                     <h1 class="text-center mb-3">Kirjaudu sisään</h1>
-                    
                     <?php if (!empty($message)): ?>
                         <div class="mb-2 text-center">
                             <p style="color: red;"><?php echo htmlspecialchars($message); ?></p>
@@ -98,18 +96,18 @@ mysqli_close($link);
                     <form action="login.php" method="post">
                         <div class="mb-2">
                             <label for="loginemail">Sähköposti</label>
-                            <input type="email" id="loginemail" name="loginemail" placeholder="user@example.com" required>
+                            <input type="email" id="loginemail" name="loginemail" placeholder="käyttäjä@esimerkki.com" required>
                         </div>
                         <div class="mb-2">
                             <label for="loginpassword">Salasana</label>
-                            <input type="password" id="loginpassword" name="loginpassword" placeholder="Enter password" required>
+                            <input type="password" id="loginpassword" name="loginpassword" placeholder="Syötä salasana" required>
                         </div>
                         <button type="submit" class="btn btn-primary">Kirjaudu sisään</button>
                     </form>
-                    
-                    <div class="text-center mt-2">
-                        <p>Eikö sinulla ole tiliä? <a href="register.php">Rekisteröidy tästä</a></p>
-                    </div>
+                </div>
+                <div class="flex-column justify-center align-center text-center">
+                    <h1>Etkö ole vielä rekisteröitynyt?</h1>
+                    <a href="register.php" class="btn" role="button">Luo tunnus tästä</a>
                 </div>
             </div>
         </div>
@@ -118,7 +116,7 @@ mysqli_close($link);
     <footer class="mt-2">
         <div class="card">
             <div class="container text-center">
-                <p>&copy; 2026 Nikolaos Gavras. <br> Savon ammattiopisto</p>
+                <p>&copy; 2026 Nikolaos Gavras <br> Savon ammattiopisto</p>
             </div>
         </div>
     </footer>

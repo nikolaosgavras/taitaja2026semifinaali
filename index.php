@@ -99,7 +99,7 @@ mysqli_close($link);
                     </p>
                 </div>
                 <div class="flex-column text-center align-center justify-center">
-                    <a href="plans.php" class="btn" role="button">Tutustu kaavaehtotuksiin</a>
+                    <a href="plans.php" class="btn" role="button">Tutustu kaavaehdotuksiin</a>
                     <a href="auth/register.php" class="btn" role="button">Rekisteröidy ja kommentoi kaavaehdotuksia</a>
                     <a href="auth/login.php" class="btn" role="button">Kirjaudu sisään</a>
                 </div>
@@ -110,7 +110,7 @@ mysqli_close($link);
     <footer class="mt-2">
         <div class="card">
             <div class="container text-center">
-                <p>&copy; 2026 Nikolaos Gavras. <br> Savon ammattiopisto</p>
+                <p>&copy; 2026 Nikolaos Gavras <br> Savon ammattiopisto</p>
             </div>
         </div>
     </footer>
