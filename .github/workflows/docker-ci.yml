@@ -1,0 +1,88 @@
+name: Docker CI + Deploy
+
+on:
+  push:
+    branches: ["main"]
+  pull_request:
+    branches: ["main"]
+
+jobs:
+  build:
+    name: Build & Push Image
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Build the Docker image
+        run: |
+          docker build . \
+            --file Dockerfile \
+            --tag "git.taitaja2026.nstrim.app/${{ github.repository }}:latest"
+
+      - name: Docker login (registry)
+        env:
+          USER: ${{ secrets.USER }}
+          PASS: ${{ secrets.PASS }}
+        run: |
+          docker login -u "$USER" -p "$PASS" git.taitaja2026.nstrim.app
+
+      - name: Push image
+        run: |
+          docker push "git.taitaja2026.nstrim.app/${{ github.repository }}:latest"
+
+  deploy:
+    name: Deploy new version
+    needs: build
+    if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+    runs-on: self-hosted
+    steps:
+      - name: Docker login (registry)
+        env:
+          USER: ${{ secrets.USER }}
+          PASS: ${{ secrets.PASS }}
+        run: |
+          docker login -u "$USER" -p "$PASS" git.taitaja2026.nstrim.app
+          
+      - name: Deploy new image
+        shell: bash
+        env:
+          GITEA_USER: ${{ secrets.USER }}
+          REPO: ${{ github.event.repository.name }}
+          COMPOSE_ROOT: /srv
+          COMPOSE_PROJECT: session
+        run: |
+          set -euo pipefail
+
+          USER="$GITEA_USER"
+          REPO="$REPO"
+          COMPOSE_ROOT="$COMPOSE_ROOT"
+
+          # Expected compose file name pattern:
+          # /srv/<GITEA_USER>_<anything>_<REPO>.yaml
+          mapfile -t CANDIDATES < <(
+            find "$COMPOSE_ROOT" -maxdepth 1 -type f -name "${USER}_*.yaml" -print | sort
+          )
+
+          if [ "${#CANDIDATES[@]}" -eq 0 ]; then
+            echo "No compose file found matching: ${COMPOSE_ROOT}/${USER}_*_${REPO}.yaml"
+            echo "Available yaml files:"
+            ls -1 "$COMPOSE_ROOT"/*.yaml 2>/dev/null | sed -n '1,200p' || true
+            exit 1
+          fi
+
+          if [ "${#CANDIDATES[@]}" -gt 1 ]; then
+            echo "Multiple compose files match (ambiguous):"
+            printf ' - %s\n' "${CANDIDATES[@]}"
+            exit 1
+          fi
+
+          COMPOSE_FILE="${CANDIDATES[0]}"
+          echo "Using compose file: $COMPOSE_FILE"
+
+          # Optional sanity check:
+          # IMAGE="git.taitaja2026.nstrim.app/${REPO}:latest"
+          # echo "Sanity check pull: $IMAGE"
+          # docker pull "$IMAGE"
+
+          docker compose -p "$COMPOSE_PROJECT" -f "$COMPOSE_FILE" pull
+          docker compose -p "$COMPOSE_PROJECT" -f "$COMPOSE_FILE" up -d --force-recreate
