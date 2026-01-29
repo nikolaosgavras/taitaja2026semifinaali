@@ -1,104 +1,127 @@
-<?php include 'config/conn.php';
-
+<?php
 session_start();
+
+include '../config/conn.php';
     
 $link = createMysqliConnection();  
 
+$message = '';
 
+/* AI USE: CLAUDE
+Login toiminallisuuteen */
 
-
-if (isset($_SESSION['account_loggedin'])) {
-    header('Location: admin.php');
+// Redirect if already logged in
+if (isset($_SESSION['loggedin']) && $_SESSION['loggedin'] === true) {
+    header('Location: ../index.php');
     exit;
 }
 
-
-
-// Prepare our SQL, which will prevent SQL injection
-if ($stmt = $link->prepare('SELECT paneladmin_id, password_hash, role FROM admins WHERE username = ?')) {
-    // Bind parameters (s = string, i = int, b = blob, etc), in our case the username is a string so we use "s"
-    $stmt->bind_param('s', $_POST['username']);
-    $stmt->execute();
-    // Store the result so we can check if the account exists in the database
-    $stmt->store_result();
-    
-    // Check if account exists with the input username
-if ($stmt->num_rows > 0) {
-    // Account exists, so bind the results to variables
-    $stmt->bind_result($id, $password, $role);
-    $stmt->fetch();
-    // Note: remember to use password_hash in your registration file to store the hashed passwords
-    if (password_verify($_POST['password'], $password)) {
-        // Password is correct! User has logged in!
-        // Regenerate the session ID to prevent session fixation attacks
-        session_regenerate_id();
-        // Declare session variables (they basically act like cookies but the data is remembered on the server)
-        $_SESSION['account_loggedin'] = TRUE;
-        $_SESSION['account_name'] = $_POST['username'];
-        $_SESSION['account_id'] = $id;
-        $_SESSION['account_role'] = $role; // account role doesnt update without refreshing login after changing role in edituser.php
-        // redirect to admin panel
-        if ($role !== 'staff') {
-        header('Location: userpanel.php');
-        exit;
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    // Check if the account exists
+    if ($stmt = $link->prepare('SELECT user_id, name, email, password_hash FROM accounts WHERE email = ?')) {
+        $stmt->bind_param('s', $_POST['loginemail']);
+        $stmt->execute();
+        $stmt->store_result();
+        
+        // Check if account exists
+        if ($stmt->num_rows > 0) {
+            $stmt->bind_result($user_id, $name, $email, $password_hash);
+            $stmt->fetch();
+            
+            // Verify password
+            if (password_verify($_POST['loginpassword'], $password_hash)) {
+                // Password is correct, create session
+                $_SESSION['loggedin'] = true;
+                $_SESSION['user_id'] = $user_id;
+                $_SESSION['name'] = $name;
+                $_SESSION['email'] = $email;
+                
+                // Redirect to home page
+                header('Location: ../index.php');
+                exit;
+            } else {
+                $message = 'Incorrect email or password!';
+            }
+        } else {
+            $message = 'Incorrect email or password!';
+        }
+        $stmt->close();
     } else {
-        header('Location: admin.php');
-        exit;
+        $message = 'Could not prepare statement!';
     }
-    } else {
-        // Incorrect password
-        echo 'Incorrect username and/or password!';
-    }
-} 
-
-    // Close the prepared statement
-    $stmt->close();
 }
 
-
-
 mysqli_close($link);
-
+/* AI USE END */
 ?>
 
-<html lang="en">
-    <head>
-        <meta charset="utf-8">
-        <meta name="viewport" content="width=device-width,minimum-scale=1">
-        <title>Admin Login - Hobbly</title>
-        <link rel="icon" type="image/png" href="images/symbols/symbol_primary@low-res.png">
-        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB" crossorigin="anonymous">
-        <link rel="stylesheet" href="styles.css">
-    </head>
-    <body>
-        <div class="login-container">
-            <div class="login-card">
-                <div class="login-logo">
-                    <img src="images/logos/logo_primary_1@high-res.png" alt="Hobbly Logo">
-                </div>
-                <h1><i class="bi bi-shield-lock"></i> Admin Login</h1>
-                <form method="post">
-                    <div class="mb-3">
-                        <label for="username" class="form-label">
-                            <i class="bi bi-person"></i> Username
-                        </label>
-                        <input type="text" class="form-control" name="username" id="username" placeholder="Enter your username" required autofocus>
+<!DOCTYPE html>
+<html lang="fi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kirjaudu sisään</title>
+    <link rel="stylesheet" href="../css/style.css">
+</head>
+<body>
+    <nav class="mb-3">
+        <div class="container">
+            <div class="nav-wrapper">
+                <a href="../index.php" class="nav-brand">Kaavakanta</a>
+                <button class="nav-toggle" id="navToggle" aria-label="Toggle navigation">
+                    <span class="hamburger"></span>
+                    <span class="hamburger"></span>
+                    <span class="hamburger"></span>
+                </button>
+                <ul class="nav-menu" id="navMenu">
+                    <li><a href="../plans.php" class="text-center">Kaavaehdotukset</a></li>
+                    <li><a href="register.php" class="btn btn-secondary">Rekisteröidy</a></li>
+                    <li><a href="login.php" class="btn btn-secondary">Kirjaudu</a></li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <main>
+        <div class="container">
+            <div class="grid-2">
+                <div></div>
+                <div>
+                    <h1 class="text-center mb-3">Kirjaudu sisään</h1>
+                    
+                    <?php if (!empty($message)): ?>
+                        <div class="mb-2 text-center">
+                            <p style="color: red;"><?php echo htmlspecialchars($message); ?></p>
+                        </div>
+                    <?php endif; ?>
+                    
+                    <form action="login.php" method="post">
+                        <div class="mb-2">
+                            <label for="loginemail">Sähköposti</label>
+                            <input type="email" id="loginemail" name="loginemail" placeholder="user@example.com" required>
+                        </div>
+                        <div class="mb-2">
+                            <label for="loginpassword">Salasana</label>
+                            <input type="password" id="loginpassword" name="loginpassword" placeholder="Enter password" required>
+                        </div>
+                        <button type="submit" class="btn btn-primary">Kirjaudu sisään</button>
+                    </form>
+                    
+                    <div class="text-center mt-2">
+                        <p>Eikö sinulla ole tiliä? <a href="register.php">Rekisteröidy tästä</a></p>
                     </div>
-                    <div class="mb-3">
-                        <label for="password" class="form-label">
-                            <i class="bi bi-lock"></i> Password
-                        </label>
-                        <input type="password" class="form-control" name="password" id="password" placeholder="Enter your password" required>
-                    </div>
-                    <button type="submit" class="btn btn-primary w-100">
-                        <i class="bi bi-box-arrow-in-right"></i> Sign In
-                    </button>
-                </form>
-                <div class="login-footer">
-                    <p>Secure admin access for Hobbly platform</p>
                 </div>
             </div>
         </div>
-        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js" integrity="sha384-FKyoEForCGlyvwx9Hj09JcYn3nv7wiPVlz7YYwJrWVcXK/BmnVDxM+D2scQbITxI" crossorigin="anonymous"></script>
-    </body>
+    </main>
+
+    <footer class="mt-2">
+        <div class="card">
+            <div class="container text-center">
+                <p>&copy; 2026 Nikolaos Gavras. <br> Savon ammattiopisto</p>
+            </div>
+        </div>
+    </footer>
+</body>
+<script src="../js/scripts.js"></script>
 </html>

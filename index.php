@@ -45,8 +45,13 @@ mysqli_close($link);
                 </button>
                 <ul class="nav-menu" id="navMenu">
                     <li><a href="plans.php" class="text-center">Kaavaehdotukset</a></li>
-                    <li><a href="register.php" class="btn btn-secondary">Rekisteröidy</a></li>
-                    <li><a href="login.php" class="btn btn-secondary">Kirjaudu</a></li>
+                    <?php if (isset($_SESSION['loggedin']) && $_SESSION['loggedin'] === true): ?>
+                        <li><span class="text-center">Terve, <?php echo htmlspecialchars($_SESSION['name']); ?>!</span></li>
+                        <li><a href="auth/logout.php" class="btn btn-secondary">Kirjaudu ulos</a></li>
+                    <?php else: ?>
+                        <li><a href="auth/register.php" class="btn btn-secondary">Rekisteröidy</a></li>
+                        <li><a href="auth/login.php" class="btn btn-secondary">Kirjaudu</a></li>
+                    <?php endif; ?>
                 </ul>
             </div>
         </div>
