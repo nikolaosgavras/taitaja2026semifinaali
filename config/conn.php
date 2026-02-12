@@ -1,8 +1,8 @@
 <?php
 // Database configuration
-$server = "db.taitaja2026.nstrim.app";
-$username = "competitor17";
-$password = "5RRYSVPG";
+$server = "localhost";
+$username = "root";
+$password = "";
 $db = "competitor17_semifinals-module";
 
 // Set charset for proper handling of Finnish characters

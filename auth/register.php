@@ -160,8 +160,8 @@ mysqli_close($link);
         </div>
     </div>
     <?php endif; ?>
-</body>
 <script src="../js/scripts.js"></script>
+</body>
 <script>
     // Password match validation
 function validateForm() {

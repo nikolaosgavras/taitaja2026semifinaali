@@ -322,6 +322,6 @@ mysqli_close($link);
             </div>
         </div>
     </footer>
-</body>
 <script src="js/scripts.js"></script>
+</body>
 </html>
