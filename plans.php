@@ -283,7 +283,9 @@ mysqli_close($link);
                                     <td data-label="Tila"><?php echo htmlspecialchars($plan['status_name'] ?? 'Ei tietoa'); ?></td>
                                     <td data-label="">
                                         <a href="plans.php?id=<?php echo $plan['id']; ?>" style="display: inline-flex; align-items: center; gap: 10px;">
-                                            <img src="icons/6.svg" alt="Tarkastele kaavaehdotusta">
+                                            <svg width="45" height="45" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                                <path d="M5 12h14m-7-7l7 7-7 7"/>
+                                            </svg>
                                         </a>
                                     </td>
                                 </tr>

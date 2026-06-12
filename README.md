@@ -1,7 +1,18 @@
 # Kaavakanta - Web-kehitys Semifinaalitehtävä
 
+### Projekti tehtiin Taitaja2026-semifinaalissa, olen jälkeenpäin lisännyt tietokannat lokaalisesti portfoliota varten ja tehnyt UI parannuksia.
+
+![alt text](image.png)
+
 ## Projektin Kuvaus
 Kaavakanta on kunnan verkkopalvelu, jonka kautta kuntalaiset voivat tutustua ajankohtaisiin maankäytön kaavaehdotuksiin ja seurata kaavaprosessin etenemistä.
+
+## Testing:
+Vaatii Docker / Docker Compose ja PHP
+- Varmista että olet taitaja2026semifinaali hakemistossa
+- Aja `docker compose up --build` terminaalissa
+- Avaa selain ja mene `localhost:8080`
+- Voit nähdä phpMyAdmin:in menemällä `localhost:3000`
 
 ---
 

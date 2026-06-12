@@ -1,9 +1,9 @@
 <?php
-// Database configuration
-$server = "localhost";
-$username = "root";
-$password = "";
-$db = "competitor17_semifinals-module";
+// Database configuration (env vars allow Docker overrides, defaults keep local dev working)
+$server = getenv('DB_HOST') ?: "localhost";
+$username = getenv('DB_USER') ?: "root";
+$password = getenv('DB_PASSWORD') ?: "";
+$db = getenv('DB_NAME') ?: "competitor17_semifinals-module";
 
 // Set charset for proper handling of Finnish characters
 $charset = "utf8mb4";
