@@ -2,7 +2,7 @@
 
 ### Projekti tehtiin Taitaja2026-semifinaalissa, olen jälkeenpäin lisännyt tietokannat lokaalisesti portfoliota varten ja tehnyt UI parannuksia.
 
-![alt text](image.png)
+![alt text](kaavakanta.png)
 
 ## Projektin Kuvaus
 Kaavakanta on kunnan verkkopalvelu, jonka kautta kuntalaiset voivat tutustua ajankohtaisiin maankäytön kaavaehdotuksiin ja seurata kaavaprosessin etenemistä.
