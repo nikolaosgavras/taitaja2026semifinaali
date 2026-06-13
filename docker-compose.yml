@@ -3,12 +3,9 @@ services:
     build: .
     container_name: semifinals_web
     ports:
-      - "8080:80"
-    environment:
-      DB_HOST: db
-      DB_USER: root
-      DB_PASSWORD: rootpassword
-      DB_NAME: competitor17_semifinals-module
+      - "3001:80"
+    env_file:
+      - .env
     depends_on:
       db:
         condition: service_healthy
@@ -17,33 +14,16 @@ services:
   db:
     image: mysql:8.4
     container_name: semifinals_mysql
-    environment:
-      MYSQL_ROOT_PASSWORD: rootpassword
-      MYSQL_DATABASE: competitor17_semifinals-module
-    ports:
-      - "3306:3306"
+    env_file:
+      - .env
     volumes:
       - db_data:/var/lib/mysql
       - ./sql/competitor17_semifinals-module.sql:/docker-entrypoint-initdb.d/init.sql:ro
     healthcheck:
-      test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-prootpassword"]
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-p${MYSQL_ROOT_PASSWORD}"]
       interval: 5s
       timeout: 5s
       retries: 10
-    restart: unless-stopped
-
-  phpmyadmin:
-    image: phpmyadmin:latest
-    container_name: semifinals_phpmyadmin
-    ports:
-      - "3000:80"
-    environment:
-      PMA_HOST: db
-      PMA_USER: root
-      PMA_PASSWORD: rootpassword
-    depends_on:
-      db:
-        condition: service_healthy
     restart: unless-stopped
 
 volumes:
