@@ -1,0 +1,33 @@
+# Secrets and credentials must never be copied into the web image.
+**/.env
+**/.env.*
+**/.aws
+**/.ssh
+**/*.pem
+**/*.key
+
+# Repository, agent, and editor metadata.
+**/.git
+**/.github
+**/.agents
+**/.codex
+**/.idea
+**/.vscode
+
+# Database initialization uses a Compose bind mount, not the web image.
+sql
+**/*.sql
+**/*.sql.gz
+
+# Build configuration, documentation, and portfolio screenshots.
+Dockerfile
+docker-compose*.yml
+docker-compose*.yaml
+README.md
+kaavakanta.png
+
+# Local logs and temporary files.
+**/*.log
+**/*.swp
+**/*.swo
+**/*~
